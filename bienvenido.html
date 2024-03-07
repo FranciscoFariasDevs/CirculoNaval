@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenidos</title>
+  <title>Bienvenido s</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Agregamos FontAwesome para los iconos -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Agregamos Bootstrap para los estilos -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Agregamos jQuery -->
@@ -27,8 +27,6 @@ body {
 h2 {
   text-align: center;
   color: #4682B4; /* Azul acero */
-  padding-bottom: 20px;
-  font-size: 49px;
 }
 
 table {
@@ -108,7 +106,7 @@ th, td {
 </head>
 <body>
   <div class="container">
-    <h2>Lista de socios</h2>
+    <h2>CRUD de Socios</h2>
     <div class="button-container">
       <button class="agregar">Agregar Socio</button>
       <input type="text" id="buscador" placeholder="Buscar...">
@@ -148,94 +146,159 @@ th, td {
   </div>
 
   <!-- Script JavaScript aquí -->
-  <!-- Script JavaScript aquí -->
-<script>
-  $(document).ready(function() {
-      // Función para obtener los socios guardados en el almacenamiento local
-      function obtenerSociosGuardados() {
-          var sociosGuardados = localStorage.getItem("socios");
-          if (sociosGuardados) {
-              return JSON.parse(sociosGuardados);
-          } else {
-              return [];
-          }
-      }
+  <script>
+    // Manejar el evento de clic en el botón "Calcular Total"
+$("#calcularTotal").click(function() {
+  // Mostrar el espacio para ingresar el monto
+  var montoHTML = '<div id="montoContainer"><input type="text" id="montoInput" placeholder="Ingrese el monto" style="margin-right: 10px;"><button id="calcularDescuento">Calcular</button></div>';
+  $(".button-container").append(montoHTML);
 
-      // Función para guardar los socios en el almacenamiento local
-      function guardarSocios(socios) {
-          localStorage.setItem("socios", JSON.stringify(socios));
-      }
-
-      // Función para mostrar los socios en la tabla
-      function mostrarSocios() {
-          var socios = obtenerSociosGuardados();
-          var tableBody = $("#socios-table tbody");
-          tableBody.html("");
-
-          socios.forEach(function(socio, index) {
-              var row = "<tr>";
-              row += "<td>" + socio.nombre + "</td>";
-              row += "<td>" + socio.apellido + "</td>";
-              row += "<td>" + socio.rut + "</td>";
-              row += "<td>" + socio.ultimoMesPago + "</td>";
-              row += "<td>";
-              row += "<button class='eliminar' data-index='" + index + "'>Eliminar</button>"; // Botón eliminar
-              row += "</td>";
-              row += "</tr>";
-              tableBody.append(row);
-          });
-      }
-
-      // Función para agregar un nuevo socio
-      $(".agregar").click(function() {
-          $("#form-agregar-socio").toggle(); // Mostrar o ocultar el formulario al hacer clic en el botón "Agregar Socio"
-      });
-
-      // Manejar el evento de enviar el formulario
-      $("#form-agregar-socio").submit(function(event) {
-          event.preventDefault(); // Evitar el envío del formulario
-
-          // Obtener los valores del formulario
-          var nombre = $("#nombre").val();
-          var apellido = $("#apellido").val();
-          var rut = $("#rut").val();
-          var ultimoMesPago = $("#ultimoMesPago").val();
-
-          // Obtener los socios guardados
-          var socios = obtenerSociosGuardados();
-
-          // Agregar el nuevo socio al array
-          socios.push({ nombre: nombre, apellido: apellido, rut: rut, ultimoMesPago: ultimoMesPago });
-
-          // Guardar los socios actualizados en el almacenamiento local
-          guardarSocios(socios);
-
-          // Mostrar la tabla actualizada
-          mostrarSocios();
-
-          // Limpiar el formulario después de agregar el socio
-          $("#nombre").val("");
-          $("#apellido").val("");
-          $("#rut").val("");
-          $("#ultimoMesPago").val("");
-
-          // Ocultar el formulario
-          $("#form-agregar-socio").hide();
-      });
-
-      // Eliminar un socio
-      $(document).on('click', '.eliminar', function() {
-          var index = $(this).data('index');
-          var socios = obtenerSociosGuardados();
-          socios.splice(index, 1); // Eliminar el socio del array
-          guardarSocios(socios); // Guardar los socios actualizados en el almacenamiento local
-          mostrarSocios(); // Volver a mostrar la tabla actualizada
-      });
-
-      // Mostrar los socios al cargar la página
-      mostrarSocios();
+  // Manejar el evento de clic en el botón "Calcular Descuento"
+  $("#calcularDescuento").click(function() {
+    var monto = $("#montoInput").val().replace(/\D/g, ''); // Obtener el monto ingresado y eliminar los caracteres que no sean dígitos
+    var total = parseInt(monto.replace(/,/g, '')) * 0.9; // Calcular el total con descuento (0.9 es el descuento del 10%)
+    alert("Total con descuento: $" + total.toLocaleString()); // Mostrar el total con descuento
   });
-</script>
+});
 
+    // Función para obtener los socios guardados en el almacenamiento local
+    function obtenerSociosGuardados() {
+      var sociosGuardados = localStorage.getItem("socios");
+      if (sociosGuardados) {
+        return JSON.parse(sociosGuardados);
+      } else {
+        return [];
+      }
+    }
+
+    // Función para guardar los socios en el almacenamiento local
+    function guardarSocios(socios) {
+      localStorage.setItem("socios", JSON.stringify(socios));
+    }
+
+    // Función para mostrar los socios en la tabla
+    function mostrarSocios() {
+      var socios = obtenerSociosGuardados();
+      var tableBody = $("#socios-table tbody");
+      tableBody.html("");
+
+      socios.forEach(function(socio, index) {
+        var row = "<tr>";
+        row += "<td>" + socio.nombre + "</td>";
+        row += "<td>" + socio.apellido + "</td>";
+        row += "<td>" + socio.rut + "</td>";
+        row += "<td>" + socio.ultimoMesPago + "</td>";
+        row += "<td>";
+        row += "<button class='btn eliminar' onclick='eliminarSocio(" + index + ")'>Eliminar</button>"; // Botón eliminar
+        row += "</td>";
+        row += "</tr>";
+        tableBody.append(row);
+      });
+    }
+    $(document).ready(function() {
+    // Función para activar la edición de una celda al hacer clic en ella
+    $('td').click(function() {
+        var contenidoActual = $(this).text().trim();
+        var input = $('<input type="text">').val(contenidoActual);
+        $(this).html(input);
+        input.focus(); // Colocar el foco en el input para empezar a editar
+    });
+
+    // Función para guardar los cambios al presionar la tecla "Enter" mientras se edita
+    $('td').keypress(function(e) {
+        if (e.which == 13) { // Tecla "Enter"
+            var nuevoContenido = $(this).find('input').val();
+            $(this).text(nuevoContenido);
+        }
+    });
+});
+    // Función para eliminar un socio
+    function eliminarSocio(index) {
+      var socios = obtenerSociosGuardados();
+      socios.splice(index, 1); // Eliminar el socio del array
+      guardarSocios(socios); // Guardar los socios actualizados en el almacenamiento local
+      mostrarSocios(); // Volver a mostrar la tabla actualizada
+    }
+
+    // Función para agregar un nuevo socio
+    $(".agregar").click(function() {
+      $("#form-agregar-socio").toggle(); // Mostrar o ocultar el formulario al hacer clic en el botón "Agregar Socio"
+    });
+
+    // Manejar el evento de enviar el formulario
+    $("#form-agregar-socio").submit(function(event) {
+      event.preventDefault(); // Evitar el envío del formulario
+
+      // Obtener los valores del formulario
+      var nombre = $("#nombre").val();
+      var apellido = $("#apellido").val();
+      var rut = $("#rut").val();
+      var ultimoMesPago = $("#ultimoMesPago").val();
+
+
+// Obtener los socios guardados
+var socios = obtenerSociosGuardados();
+
+// Agregar el nuevo socio al array
+socios.push({ nombre: nombre, apellido: apellido, rut: rut, ultimoMesPago: ultimoMesPago });
+
+// Guardar los socios actualizados en el almacenamiento local
+guardarSocios(socios);
+
+// Mostrar la tabla actualizada
+mostrarSocios();
+
+// Limpiar el formulario después de agregar el socio
+$("#nombre").val("");
+$("#apellido").val("");
+$("#rut").val("");
+$("#ultimoMesPago").val("");
+
+// Ocultar el formulario
+$("#form-agregar-socio").hide();
+});
+
+// Mostrar los socios al cargar la página
+$(document).ready(function() {
+mostrarSocios();
+});
+
+// Función para mostrar los socios en la tabla filtrados por el texto del buscador
+function mostrarSociosFiltrados(texto) {
+  var socios = obtenerSociosGuardados();
+  var tableBody = $("#socios-table tbody");
+  tableBody.html("");
+
+  socios.forEach(function(socio, index) {
+    // Verificar si el nombre, apellido, rut o último mes de pago contiene el texto del buscador
+    if (
+      socio.nombre.toLowerCase().includes(texto.toLowerCase()) ||
+      socio.apellido.toLowerCase().includes(texto.toLowerCase()) ||
+      socio.rut.toLowerCase().includes(texto.toLowerCase()) ||
+      socio.ultimoMesPago.toLowerCase().includes(texto.toLowerCase())
+    ) {
+      var row = "<tr>";
+      row += "<td>" + socio.nombre + "</td>";
+      row += "<td>" + socio.apellido + "</td>";
+      row += "<td>" + socio.rut + "</td>";
+      row += "<td>" + socio.ultimoMesPago + "</td>";
+      row += "<td>";
+      row += "<button class='btn eliminar' onclick='eliminarSocio(" + index + ")'>Eliminar</button>"; // Botón eliminar
+      row += "</td>";
+      row += "</tr>";
+      tableBody.append(row);
+    }
+  });
+}
+
+// Manejar el evento de cambio en el campo de búsqueda
+$("#buscador").on("keyup", function() {
+  var texto = $(this).val(); // Obtener el texto del campo de búsqueda
+  mostrarSociosFiltrados(texto); // Mostrar los socios filtrados
+});
+$(".total").click(function() {
+  window.location.href = "calculadora.html"; // Redirigir a la página "calculadora.html"
+});
+</script>
 </body>
 </html>
