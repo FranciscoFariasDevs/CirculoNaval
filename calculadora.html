@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Descuento a Socio</title>
+
+</head>
+<body>
+  <div class="calculator-container">
+    <h1>Descuento a Socio</h1>
+    <div class="input-container">
+      <input type="text" id="precioTotal" placeholder="Precio Total">
+    </div>
+    <button id="calcular">Calcular</button>
+    <div id="resultado"></div>
+  </div>
+
+</body>
+</html>
+<style>body {
+    font-family: Arial, sans-serif;
+    background-color: #1f1f1f;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .calculator-container {
+    text-align: center;
+  }
+  
+  .input-container {
+    margin-bottom: 20px;
+  }
+  
+  input {
+    padding: 15px;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    background-color: #1f1f1f;
+    color: #FFFFFF;
+    width: 250px;
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  input:focus {
+    outline: none;
+  }
+  
+  button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  #resultado {
+    margin-top: 20px;
+    font-size: 24px;
+    color: #FF0000;
+  }
+  </style>
+
+  <script>document.getElementById('calcular').addEventListener('click', function() {
+    var precioTotal = document.getElementById('precioTotal').value.replace(/\D/g, ''); // Eliminar caracteres no numéricos antes de calcular
+    var resultado = Math.round(precioTotal * 0.9); // Redondear el resultado al entero más cercano
+    document.getElementById('resultado').innerHTML = "TOTAL CON DESCUENTO: $" + numberWithDots(resultado);
+  });
+  
+  document.getElementById('precioTotal').addEventListener('input', function() {
+    this.value = numberWithDots(this.value.replace(/\D/g, ''));
+  });
+  
+  function numberWithDots(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  
+  
+  </script>

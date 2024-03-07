@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenidos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Agregamos FontAwesome para los iconos -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Agregamos Bootstrap para los estilos -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Agregamos jQuery -->
+  <style>
+ /* Estilos CSS aquí */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #87CEEB; /* Azul claro, color del cielo */
+}
+
+.container {
+  width: 90%; /* Utiliza el 90% del ancho disponible */
+  max-width: 800px; /* Máximo ancho de 800px */
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #F0FFFF; /* Blanco azulado, color de las nubes */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #4682B4; /* Azul acero */
+  padding-bottom: 20px;
+  font-size: 49px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.button-container button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-container button.agregar {
+  background-color: #008000; /* Verde */
+  color: white;
+}
+
+.button-container button.editar {
+  background-color: #808080; /* Gris */
+  color: white;
+}
+
+.button-container button.eliminar {
+  background-color: #FF0000; /* Rojo */
+  color: white;
+}
+
+.button-container button.total {
+  background-color: #800080; /* Morado */
+  color: white;
+}
+
+.button-container button:hover {
+  opacity: 0.8;
+}
+
+#form-agregar-socio {
+  display: none;
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  /* Estilos específicos para pantallas pequeñas (dispositivos móviles) */
+  .container {
+    padding: 10px; /* Reducir el padding en pantallas pequeñas */
+  }
+
+  .button-container {
+    flex-direction: column; /* Cambiar la dirección de la columna en pantallas pequeñas */
+    align-items: center; /* Centrar los elementos en la columna */
+  }
+
+  .button-container button {
+    margin: 5px 0; /* Añadir espacio entre los botones en pantallas pequeñas */
+  }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lista de socios</h2>
+    <div class="button-container">
+      <button class="agregar">Agregar Socio</button>
+      <input type="text" id="buscador" placeholder="Buscar...">
+      <button class="total">Calcular Total</button>
+    </div>
+    <form id="form-agregar-socio">
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+        </div>
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" id="apellido" placeholder="Apellido">
+        </div>
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" id="rut" placeholder="Rut">
+        </div>
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" id="ultimoMesPago" placeholder="Último Mes de Pago">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+    <table id="socios-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Rut</th>
+          <th>Último Mes de Pago</th> <!-- Nueva columna -->
+          <th>Acciones</th> <!-- Columna de acciones -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se mostrarán los socios -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Script JavaScript aquí -->
+  <!-- Script JavaScript aquí -->
+<script>
+  $(document).ready(function() {
+      // Función para obtener los socios guardados en el almacenamiento local
+      function obtenerSociosGuardados() {
+          var sociosGuardados = localStorage.getItem("socios");
+          if (sociosGuardados) {
+              return JSON.parse(sociosGuardados);
+          } else {
+              return [];
+          }
+      }
+
+      // Función para guardar los socios en el almacenamiento local
+      function guardarSocios(socios) {
+          localStorage.setItem("socios", JSON.stringify(socios));
+      }
+
+      // Función para mostrar los socios en la tabla
+      function mostrarSocios() {
+          var socios = obtenerSociosGuardados();
+          var tableBody = $("#socios-table tbody");
+          tableBody.html("");
+
+          socios.forEach(function(socio, index) {
+              var row = "<tr>";
+              row += "<td>" + socio.nombre + "</td>";
+              row += "<td>" + socio.apellido + "</td>";
+              row += "<td>" + socio.rut + "</td>";
+              row += "<td>" + socio.ultimoMesPago + "</td>";
+              row += "<td>";
+              row += "<button class='eliminar' data-index='" + index + "'>Eliminar</button>"; // Botón eliminar
+              row += "</td>";
+              row += "</tr>";
+              tableBody.append(row);
+          });
+      }
+
+      // Función para agregar un nuevo socio
+      $(".agregar").click(function() {
+          $("#form-agregar-socio").toggle(); // Mostrar o ocultar el formulario al hacer clic en el botón "Agregar Socio"
+      });
+
+      // Manejar el evento de enviar el formulario
+      $("#form-agregar-socio").submit(function(event) {
+          event.preventDefault(); // Evitar el envío del formulario
+
+          // Obtener los valores del formulario
+          var nombre = $("#nombre").val();
+          var apellido = $("#apellido").val();
+          var rut = $("#rut").val();
+          var ultimoMesPago = $("#ultimoMesPago").val();
+
+          // Obtener los socios guardados
+          var socios = obtenerSociosGuardados();
+
+          // Agregar el nuevo socio al array
+          socios.push({ nombre: nombre, apellido: apellido, rut: rut, ultimoMesPago: ultimoMesPago });
+
+          // Guardar los socios actualizados en el almacenamiento local
+          guardarSocios(socios);
+
+          // Mostrar la tabla actualizada
+          mostrarSocios();
+
+          // Limpiar el formulario después de agregar el socio
+          $("#nombre").val("");
+          $("#apellido").val("");
+          $("#rut").val("");
+          $("#ultimoMesPago").val("");
+
+          // Ocultar el formulario
+          $("#form-agregar-socio").hide();
+      });
+
+      // Eliminar un socio
+      $(document).on('click', '.eliminar', function() {
+          var index = $(this).data('index');
+          var socios = obtenerSociosGuardados();
+          socios.splice(index, 1); // Eliminar el socio del array
+          guardarSocios(socios); // Guardar los socios actualizados en el almacenamiento local
+          mostrarSocios(); // Volver a mostrar la tabla actualizada
+      });
+
+      // Mostrar los socios al cargar la página
+      mostrarSocios();
+  });
+</script>
+
+</body>
+</html>
